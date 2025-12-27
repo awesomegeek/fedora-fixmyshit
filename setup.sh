@@ -128,6 +128,11 @@ view_components() {
     echo "  - Installs Task (taskfile.dev), rg, ag, bat, lsd, yazi, btop, cowsay, sl, zellij"
     echo "  - Configures Zellij with dotfiles"
     echo ""
+
+    echo -e "${GREEN}✓${NC} AI Tooling"
+    echo "  - Installs OpenCode (opencode.ai)"
+    echo ""
+
     echo -e "${YELLOW}Coming Soon:${NC}"
     echo "  • System Updates"
     echo "  • Development Tools"
@@ -158,9 +163,10 @@ select_components() {
         ["docker"]="Docker + LazyDocker"
         ["nerdfonts"]="Nerd Fonts (JetBrainsMono/VictorMono/FiraCode)"
         ["utils"]="Utility CLI tools (task/rg/ag/bat/lsd/yazi/cowsay/sl)"
+        ["ai"]="AI Tooling (OpenCode)"
     )
 
-    component_order=(git ssh zsh neovim flatpak uv nvm rust golang docker nerdfonts utils)
+    component_order=(git ssh zsh neovim flatpak uv nvm rust golang docker nerdfonts utils ai)
 
     for key in "${component_order[@]}"; do
         while true; do
@@ -306,6 +312,15 @@ run_installation() {
                 fi
                 echo ""
                 ;;
+            ai)
+                echo -e "${CYAN}[${index}/${total}] Installing AI Tooling...${NC}"
+                if source scripts/ai.sh; then
+                    echo -e "${GREEN}✓ AI Tooling installation completed${NC}"
+                else
+                    echo -e "${RED}✗ AI Tooling installation failed${NC}"
+                fi
+                echo ""
+                ;;
             ssh)
                 echo -e "${CYAN}[${index}/${total}] Importing SSH keys...${NC}"
                 if source scripts/ssh.sh; then
@@ -394,11 +409,16 @@ is_utils_installed() {
         && command -v btop >/dev/null 2>&1 \
         && command -v cowsay >/dev/null 2>&1 \
         && command -v sl >/dev/null 2>&1 \
-        && command -v thefuck >/dev/null 2>&1
+        && command -v thefuck >/dev/null 2>&1 \
+        && command -v zellij >/dev/null 2>&1
 }
 
 is_uv_installed() {
     command -v uv >/dev/null 2>&1
+}
+
+is_ai_installed() {
+    command -v opencode >/dev/null 2>&1
 }
 
 is_nvm_node_installed() {
