@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Utility CLI tools installation script for Fedora 43
-# Installs: Task (taskfile.dev), ripgrep (rg), silver searcher (ag), bat, lsd, yazi, btop, cowsay, sl, thefuck, zellij
+# Installs: Task (taskfile.dev), ripgrep (rg), silver searcher (ag), bat, lsd, yazi, btop, cowsay, sl, thefuck, zellij, lazygit
 
 set -e  # Exit on error
 
@@ -45,6 +45,7 @@ EXTRA_TOOLS=(
     "yazi"
     "thefuck"
     "zellij"
+    "lazygit"
 )
 
 missing_pkgs=()
@@ -145,6 +146,23 @@ for tool in "${EXTRA_TOOLS[@]}"; do
                 mkdir -p "$ZELLIJ_CONF_DIR"
                 cp -r dotfiles/zellij/* "$ZELLIJ_CONF_DIR/"
             fi
+            ;;
+        lazygit)
+            if command -v lazygit >/dev/null 2>&1; then
+                echo "lazygit already installed, skipping..."
+                continue
+            fi
+
+            echo "Installing lazygit (COPR: dejan/lazygit)..."
+            # Ensure COPR support
+            if rpm -q dnf-plugins-core >/dev/null 2>&1; then
+                :
+            else
+                sudo dnf install -y dnf-plugins-core
+            fi
+
+            sudo dnf -y copr enable dejan/lazygit
+            sudo dnf install -y lazygit
             ;;
     esac
 done

@@ -125,7 +125,7 @@ view_components() {
     echo ""
 
     echo -e "${GREEN}✓${NC} Utility CLI Tools"
-    echo "  - Installs Task (taskfile.dev), rg, ag, bat, lsd, yazi, btop, cowsay, sl, zellij"
+    echo "  - Installs Task (taskfile.dev), rg, ag, bat, lsd, yazi, btop, cowsay, sl, zellij, lazygit"
     echo "  - Configures Zellij with dotfiles"
     echo ""
 
@@ -162,7 +162,7 @@ select_components() {
         ["golang"]="Go (Golang)"
         ["docker"]="Docker + LazyDocker"
         ["nerdfonts"]="Nerd Fonts (JetBrainsMono/VictorMono/FiraCode)"
-        ["utils"]="Utility CLI tools (task/rg/ag/bat/lsd/yazi/cowsay/sl)"
+        ["utils"]="Utility CLI tools (task/rg/ag/bat/lsd/yazi/cowsay/sl/lazygit)"
         ["ai"]="AI Tooling (OpenCode)"
     )
 
@@ -410,7 +410,8 @@ is_utils_installed() {
         && command -v cowsay >/dev/null 2>&1 \
         && command -v sl >/dev/null 2>&1 \
         && command -v thefuck >/dev/null 2>&1 \
-        && command -v zellij >/dev/null 2>&1
+        && command -v zellij >/dev/null 2>&1 \
+        && command -v lazygit >/dev/null 2>&1
 }
 
 is_uv_installed() {
