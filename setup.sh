@@ -90,7 +90,7 @@ view_components() {
     echo ""
     echo -e "${GREEN}✓${NC} Neovim + LazyVim"
     echo "  - Installs Neovim"
-    echo "  - Installs LazyVim starter config"
+    echo "  - Installs awesomegeek/nvim config"
     echo "  - Installs common dependencies (ripgrep, fd, build tools)"
     echo ""
     echo -e "${GREEN}✓${NC} Nerd Fonts"
@@ -497,7 +497,7 @@ preflight_summary() {
                 else
                     echo -e "${YELLOW}→${NC} Neovim + LazyVim: will install/configure"
                     is_neovim_installed || echo "  - will install package: neovim"
-                    is_lazyvim_config_present || echo "  - will install: LazyVim starter config"
+                    is_lazyvim_config_present || echo "  - will install: awesomegeek/nvim config"
                 fi
                 ;;
             utils)

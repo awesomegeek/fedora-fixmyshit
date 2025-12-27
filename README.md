@@ -35,7 +35,7 @@ Note: the scripts in `scripts/` are designed to be **sourced by the wizard**. If
 This repository automates the setup of a fresh Fedora 43 installation with:
 
 - **Shell + Prompt**: Zsh + Starship
-- **Editor**: Neovim + LazyVim starter config
+- **Editor**: Neovim + awesomegeek/nvim config
 - **Fonts**: Nerd Fonts (JetBrainsMono / Victor Mono / FiraCode)
 - **Languages/Tooling**: uv (Python), nvm (Node LTS), rustup (Rust), Go
 - **Containers**: Docker + LazyDocker

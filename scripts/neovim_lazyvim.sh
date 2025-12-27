@@ -48,9 +48,9 @@ NVIM_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
 
 # If an existing config exists, back it up so the script is safe to re-run.
 if [ -d "$NVIM_DIR" ] && [ -n "$(ls -A "$NVIM_DIR" 2>/dev/null || true)" ]; then
-    # Consider it already installed if LazyVim starter looks present.
+    # Consider it already installed if Neovim config looks present.
     if [ -f "$NVIM_DIR/lua/config/lazy.lua" ] && [ -f "$NVIM_DIR/lazy-lock.json" ]; then
-        echo "LazyVim config already present in $NVIM_DIR, skipping config install..."
+        echo "Neovim config already present in $NVIM_DIR, skipping config install..."
     else
         backup_dir="${NVIM_DIR}.backup.$(date +%Y%m%d%H%M%S)"
         echo "Existing Neovim config detected. Backing up to: $backup_dir"
@@ -59,10 +59,9 @@ if [ -d "$NVIM_DIR" ] && [ -n "$(ls -A "$NVIM_DIR" 2>/dev/null || true)" ]; then
 fi
 
 if [ ! -d "$NVIM_DIR" ]; then
-    echo "Installing LazyVim starter into: $NVIM_DIR"
+    echo "Installing Neovim config from awesomegeek/nvim into: $NVIM_DIR"
     mkdir -p "$(dirname "$NVIM_DIR")"
-    git clone --depth 1 https://github.com/LazyVim/starter "$NVIM_DIR"
-    rm -rf "$NVIM_DIR/.git"
+    git clone https://github.com/awesomegeek/nvim "$NVIM_DIR"
 fi
 
 # Pre-install plugins/headless sync (best effort; don't fail the whole rig if it errors)
