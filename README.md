@@ -40,7 +40,7 @@ This repository automates the setup of a fresh Fedora 43 installation with:
 - **Languages/Tooling**: uv (Python), nvm (Node LTS), rustup (Rust), Go
 - **Containers**: Docker + LazyDocker
 - **Apps**: Flatpak + a small curated list of Flatpak apps
-- **CLI utilities**: common terminal tools (ripgrep, bat, btop, etc.)
+- **CLI utilities**: common terminal tools (ripgrep, bat, btop, zellij, etc.)
 - **Git**: installs Git and sets global config (name/email/editor)
 - **SSH**: imports SSH keys/config from `dotfiles/.ssh`
 

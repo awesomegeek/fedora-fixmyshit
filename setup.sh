@@ -125,7 +125,8 @@ view_components() {
     echo ""
 
     echo -e "${GREEN}✓${NC} Utility CLI Tools"
-    echo "  - Installs Task (taskfile.dev), rg, ag, bat, lsd, yazi, btop, cowsay, sl"
+    echo "  - Installs Task (taskfile.dev), rg, ag, bat, lsd, yazi, btop, cowsay, sl, zellij"
+    echo "  - Configures Zellij with dotfiles"
     echo ""
     echo -e "${YELLOW}Coming Soon:${NC}"
     echo "  • System Updates"

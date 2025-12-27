@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Utility CLI tools installation script for Fedora 43
-# Installs: Task (taskfile.dev), ripgrep (rg), silver searcher (ag), bat, lsd, yazi, btop, cowsay, sl, thefuck
+# Installs: Task (taskfile.dev), ripgrep (rg), silver searcher (ag), bat, lsd, yazi, btop, cowsay, sl, thefuck, zellij
 
 set -e  # Exit on error
 
@@ -44,6 +44,7 @@ fi
 EXTRA_TOOLS=(
     "yazi"
     "thefuck"
+    "zellij"
 )
 
 missing_pkgs=()
@@ -115,6 +116,34 @@ for tool in "${EXTRA_TOOLS[@]}"; do
                 echo "dnf package 'thefuck' not available; falling back to pip user install..."
                 sudo dnf install -y python3 python3-pip
                 python3 -m pip install --user --upgrade thefuck
+            fi
+            ;;
+        zellij)
+            if command -v zellij >/dev/null 2>&1; then
+                echo "zellij already installed, skipping binary download..."
+            else
+                echo "Installing zellij (binary from GitHub)..."
+                # Ensure curl is available
+                if ! command -v curl >/dev/null 2>&1; then
+                    sudo dnf install -y curl
+                fi
+                
+                # Get latest version and download
+                ZELLIJ_VERSION=$(curl -s https://api.github.com/repos/zellij-org/zellij/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+                curl -L "https://github.com/zellij-org/zellij/releases/download/${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz" -o zellij.tar.gz
+                tar -xvf zellij.tar.gz
+                chmod +x zellij
+                mkdir -p "$HOME/.local/bin"
+                mv zellij "$HOME/.local/bin/zellij"
+                rm zellij.tar.gz
+            fi
+
+            # Configuration
+            if [ -d "dotfiles/zellij" ]; then
+                echo "Configuring zellij dotfiles..."
+                ZELLIJ_CONF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zellij"
+                mkdir -p "$ZELLIJ_CONF_DIR"
+                cp -r dotfiles/zellij/* "$ZELLIJ_CONF_DIR/"
             fi
             ;;
     esac
