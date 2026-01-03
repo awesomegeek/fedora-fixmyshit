@@ -133,6 +133,11 @@ view_components() {
     echo "  - Installs OpenCode (opencode.ai)"
     echo ""
 
+    echo -e "${GREEN}✓${NC} Conky Dashboard"
+    echo "  - Installs Conky"
+    echo "  - Installs dashboard config + GNOME autostart"
+    echo ""
+
     echo -e "${YELLOW}Coming Soon:${NC}"
     echo "  • System Updates"
     echo "  • Development Tools"
@@ -164,9 +169,10 @@ select_components() {
         ["nerdfonts"]="Nerd Fonts (JetBrainsMono/VictorMono/FiraCode)"
         ["utils"]="Utility CLI tools (task/rg/ag/bat/lsd/yazi/cowsay/sl/lazygit)"
         ["ai"]="AI Tooling (OpenCode)"
+        ["conky"]="Conky dashboard (config + autostart)"
     )
 
-    component_order=(git ssh zsh neovim flatpak uv nvm rust golang docker nerdfonts utils ai)
+    component_order=(git ssh zsh neovim flatpak uv nvm rust golang docker nerdfonts utils ai conky)
 
     for key in "${component_order[@]}"; do
         while true; do
@@ -300,6 +306,15 @@ run_installation() {
                     echo -e "${GREEN}✓ Docker + LazyDocker installation completed${NC}"
                 else
                     echo -e "${RED}✗ Docker + LazyDocker installation failed${NC}"
+                fi
+                echo ""
+                ;;
+            conky)
+                echo -e "${CYAN}[${index}/${total}] Installing Conky dashboard...${NC}"
+                if source scripts/conky.sh; then
+                    echo -e "${GREEN}✓ Conky dashboard installation completed${NC}"
+                else
+                    echo -e "${RED}✗ Conky dashboard installation failed${NC}"
                 fi
                 echo ""
                 ;;
@@ -451,6 +466,20 @@ is_git_installed() {
     command -v git >/dev/null 2>&1
 }
 
+is_conky_installed() {
+    command -v conky >/dev/null 2>&1
+}
+
+is_conky_config_present() {
+    local conky_dir="${XDG_CONFIG_HOME:-$HOME/.config}/conky"
+    [ -f "$conky_dir/conky.conf.template" ] && [ -f "$conky_dir/conky-start.sh" ]
+}
+
+is_conky_autostart_present() {
+    local autostart_dir="${XDG_CONFIG_HOME:-$HOME/.config}/autostart"
+    [ -f "$autostart_dir/conky.desktop" ] && grep -Fq "conky-start.sh" "$autostart_dir/conky.desktop"
+}
+
 nerdfonts_font_installed() {
     local font_dir="$1"
     [ -d "$font_dir" ] && find "$font_dir" -maxdepth 1 -type f \( -iname '*.ttf' -o -iname '*.otf' \) | grep -q .
@@ -554,6 +583,16 @@ preflight_summary() {
                     is_lazydocker_installed || echo "  - will install: lazydocker"
                 fi
                 ;;
+            conky)
+                if is_conky_installed && is_conky_config_present && is_conky_autostart_present; then
+                    echo -e "${GREEN}✓${NC} Conky dashboard: already installed/configured"
+                else
+                    echo -e "${YELLOW}→${NC} Conky dashboard: will install/configure"
+                    is_conky_installed || echo "  - will install package: conky"
+                    is_conky_config_present || echo "  - will install: ~/.config/conky config + start script"
+                    is_conky_autostart_present || echo "  - will configure: GNOME autostart entry"
+                fi
+                ;;
             git)
                 if is_git_installed \
                     && git_global_equals user.email "naingtunwin@gmail.com" \
@@ -637,7 +676,7 @@ main() {
     
     if [ "$setup_mode" == "full" ]; then
         # Keep SSH import out of Quick Setup for safety.
-        SETUP_COMPONENTS=("git" "zsh" "neovim" "flatpak" "uv" "nvm" "rust" "golang" "docker" "nerdfonts" "utils")
+        SETUP_COMPONENTS=("git" "zsh" "neovim" "flatpak" "uv" "nvm" "rust" "golang" "docker" "nerdfonts" "utils" "conky")
     else
         select_components
     fi
